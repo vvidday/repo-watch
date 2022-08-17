@@ -72,6 +72,17 @@ export type PushEventPayload = {
   commits: components['schemas']['commit'][]
 }
 
+export type EventInfo = {
+  id: number
+  created_at: string | null
+  repo_id: number | null
+  actor_id: number | null
+  actor_username: string | null
+  type: string | null
+  url: string | null
+  summary: string | null
+}
+
 export type Json = string | number | boolean | null | { [key: string]: Json } | Json[]
 
 export interface Database {
@@ -129,4 +140,27 @@ export interface Database {
     }
     Functions: {}
   }
+}
+
+export type RealtimeEventPayload = {
+  // the change timestamp. eg: "2020-10-13T10:09:22Z".
+  commit_timestamp: string
+
+  // any change errors.
+  errors: null | string[]
+
+  // the event type.
+  eventType: string
+
+  // event schema
+  new: EventInfo
+
+  // the previous values. eg: { "id": "9", "age": "11" }. Only works if the table has `REPLICATION FULL`.
+  old: object
+
+  // the database schema. eg: "public".
+  schema: string
+
+  // the database table. eg: "users".
+  table: string
 }
