@@ -37,13 +37,11 @@ const eventTypes = new Set<string>([
   //'WatchEvent',
 ])
 
-console.log('Hello from Functions!')
-
 serve(async (req) => {
   const { name } = await req.json()
   const githubKey = Deno.env.get('GITHUB_KEY')
   const octokit = new Octokit({ auth: githubKey })
-  const supabaseClient = createClient(Deno.env.get('SUPABASE_URL') ?? '', Deno.env.get('SUPABASE_ANON_KEY') ?? '')
+  const supabaseClient = createClient(Deno.env.get('SUPABASE_URL') ?? '', Deno.env.get('SECRET_KEY') ?? '')
 
   const res = await octokit.request('GET /repos/{owner}/{repo}/events', {
     owner: 'supabase',
