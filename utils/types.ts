@@ -71,3 +71,62 @@ export type PushEventPayload = {
   before: string
   commits: components['schemas']['commit'][]
 }
+
+export type Json = string | number | boolean | null | { [key: string]: Json } | Json[]
+
+export interface Database {
+  public: {
+    Tables: {
+      event: {
+        Row: {
+          id: number
+          created_at: string | null
+          repo_id: number | null
+          actor_id: number | null
+          actor_username: string | null
+          type: string | null
+          url: string | null
+          summary: string | null
+        }
+        Insert: {
+          id?: number
+          created_at?: string | null
+          repo_id?: number | null
+          actor_id?: number | null
+          actor_username?: string | null
+          type?: string | null
+          url?: string | null
+          summary?: string | null
+        }
+        Update: {
+          id?: number
+          created_at?: string | null
+          repo_id?: number | null
+          actor_id?: number | null
+          actor_username?: string | null
+          type?: string | null
+          url?: string | null
+          summary?: string | null
+        }
+      }
+      repo: {
+        Row: {
+          id: number
+          url: string | null
+          name: string | null
+        }
+        Insert: {
+          id?: number
+          url?: string | null
+          name?: string | null
+        }
+        Update: {
+          id?: number
+          url?: string | null
+          name?: string | null
+        }
+      }
+    }
+    Functions: {}
+  }
+}
