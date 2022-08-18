@@ -128,6 +128,7 @@ const parseCreateEvent = (event: any, row: Event): Event => {
 const parseDeleteEvent = (event: any, row: Event): Event => {
   row.url = `https://github.com/${event.repo.name}`
   row.action = event.payload.ref_type
+  row.title = event.payload.ref
   return row
 }
 

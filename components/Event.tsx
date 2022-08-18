@@ -10,11 +10,9 @@ const Event: FC<{
   const summary = getSummaryFromEvent(ev)
 
   return (
-    <div>
-      <div>
-        {icon}
-        {summary}
-      </div>
+    <div className="flex items-center m-5">
+      {icon}
+      {summary}
     </div>
   )
 }

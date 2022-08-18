@@ -17,7 +17,7 @@ import {
 import Image from 'next/image'
 import { EventInfo } from './types'
 
-const SIZE = 16
+const SIZE = 24
 
 const eventTypes = new Set<string>([
   'CommitCommentEvent',
@@ -78,14 +78,15 @@ export const getSummaryFromEvent = (event: EventInfo) => {
     case 'CreateEvent':
       summary = (
         <div>
-          created {event.action} <code>{event.title}</code>
+          created {event.action} <code>{event.title?.replace('refs/heads/', '')}</code>
         </div>
       )
       break
     case 'DeleteEvent':
+      const title = event.title?.replace('refs/heads/', '')
       summary = (
         <div>
-          deleted {event.action} <code>{event.title}</code>
+          deleted {event.action} <code>{event.title?.replace('refs/heads/', '')}</code>
         </div>
       )
       break
@@ -141,16 +142,22 @@ export const getSummaryFromEvent = (event: EventInfo) => {
     case 'PushEvent':
       summary = (
         <div>
-          pushed to <code>{event.title}</code>
+          pushed to <code>{event.title?.replace('refs/heads/', '')}</code>
         </div>
       )
       break
   }
   return (
-    <div>
-      <a href={`https://github.com/${event.actor_username}`}>
-        <Image src={`https://avatars.githubusercontent.com/u/${event.actor_id}`} width="50px" height="50px" />
-        <strong>{event.actor_username}</strong>
+    <div className="flex items-center ml-3">
+      <a className="flex items-center mr-2" href={`https://github.com/${event.actor_username}`}>
+        <Image
+          className="rounded-full"
+          src={`https://avatars.githubusercontent.com/u/${event.actor_id}`}
+          width="50px"
+          height="50px"
+          layout="fixed"
+        />
+        <strong className="hidden md:block ml-2">{event.actor_username}</strong>
       </a>
       {summary}
     </div>
