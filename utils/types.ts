@@ -74,13 +74,16 @@ export type PushEventPayload = {
 
 export type EventInfo = {
   id: number
-  created_at: string | null
-  repo_id: number | null
-  actor_id: number | null
-  actor_username: string | null
-  type: string | null
-  url: string | null
-  summary: string | null
+  created_at: string
+  repo_id: number
+  actor_id: number
+  actor_username: string
+  type: string
+  url: string
+  action: string | null
+  number: number | null
+  title: string | null
+  body: string | null
 }
 
 export type Json = string | number | boolean | null | { [key: string]: Json } | Json[]
