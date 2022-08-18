@@ -14,7 +14,10 @@ interface Event {
   actor_username: string
   type: string
   url: string
-  summary: string
+  action: string | null
+  number: number | null
+  title: string | null
+  body: string | null
 }
 
 const eventTypes = new Set<string>([
@@ -54,40 +57,6 @@ serve(async (req) => {
     if (event.type === null || !eventTypes.has(event.type)) {
       continue
     }
-    let url: string = ''
-    let summary: string = ''
-    switch (event.type) {
-      case 'CommitCommentEvent':
-        ;[url, summary] = parseCommitCommentEvent(event)
-        break
-      case 'CreateEvent':
-        ;[url, summary] = parseCreateEvent(event)
-        break
-      case 'DeleteEvent':
-        ;[url, summary] = parseDeleteEvent(event)
-        break
-      case 'IssueCommentEvent':
-        ;[url, summary] = parseIssueCommentEvent(event)
-        break
-      case 'IssuesEvent':
-        ;[url, summary] = parseIssuesEvent(event)
-        break
-      case 'PullRequestEvent':
-        ;[url, summary] = parsePullRequestEvent(event)
-        break
-      case 'PullRequestReviewEvent':
-        ;[url, summary] = parsePullRequestReviewEvent(event)
-        break
-      case 'PullRequestReviewCommentEvent':
-        ;[url, summary] = parsePullRequestReviewCommentEvent(event)
-        break
-      case 'PullRequestReviewThreadEvent':
-        ;[url, summary] = parsePullRequestReviewThreadEvent(event)
-        break
-      case 'PushEvent':
-        ;[url, summary] = parsePushEvent(event)
-        break
-    }
     const row: Event = {
       id: event.id,
       created_at: event.created_at,
@@ -95,8 +64,43 @@ serve(async (req) => {
       actor_id: event.actor.id,
       actor_username: event.actor.login,
       type: event.type,
-      url: url,
-      summary: summary,
+      url: '',
+      action: null,
+      number: null,
+      title: null,
+      body: null,
+    }
+    switch (event.type) {
+      case 'CommitCommentEvent':
+        parseCommitCommentEvent(event, row)
+        break
+      case 'CreateEvent':
+        parseCreateEvent(event, row)
+        break
+      case 'DeleteEvent':
+        parseDeleteEvent(event, row)
+        break
+      case 'IssueCommentEvent':
+        parseIssueCommentEvent(event, row)
+        break
+      case 'IssuesEvent':
+        parseIssuesEvent(event, row)
+        break
+      case 'PullRequestEvent':
+        parsePullRequestEvent(event, row)
+        break
+      case 'PullRequestReviewEvent':
+        parsePullRequestReviewEvent(event, row)
+        break
+      case 'PullRequestReviewCommentEvent':
+        parsePullRequestReviewCommentEvent(event, row)
+        break
+      case 'PullRequestReviewThreadEvent':
+        parsePullRequestReviewThreadEvent(event, row)
+        break
+      case 'PushEvent':
+        parsePushEvent(event, row)
+        break
     }
     rows.push(row)
   }
@@ -104,45 +108,91 @@ serve(async (req) => {
   if (error != null) {
     return new Response(JSON.stringify(error), { headers: { 'Content-Type': 'application/json' } })
   }
-  return new Response('Success', { headers: { 'Content-Type': 'application/json' } })
+  return new Response(JSON.stringify(rows), { headers: { 'Content-Type': 'application/json' } })
 })
 
-const parseCommitCommentEvent = (event: any): [url: string, summary: string] => {
-  return [event.payload.comment.html_url, event.payload.comment.body]
+const parseCommitCommentEvent = (event: any, row: Event): Event => {
+  row.url = event.payload.comment.html_url
+  row.body = event.payload.comment.body
+  return row
 }
 
-const parseCreateEvent = (event: any): [url: string, summary: string] => {
-  return [`https://github.com/${event.repo.name}/tree/${event.payload.ref}`, event.payload.ref_type]
+// Action = branch | tag
+const parseCreateEvent = (event: any, row: Event): Event => {
+  row.url = `https://github.com/${event.repo.name}/tree/${event.payload.ref}`
+  row.action = event.payload.ref_type
+  row.title = event.payload.ref
+  return row
 }
 
-const parseDeleteEvent = (event: any): [url: string, summary: string] => {
-  return [`https://github.com/${event.repo.name}`, event.payload.ref_type]
+const parseDeleteEvent = (event: any, row: Event): Event => {
+  row.url = `https://github.com/${event.repo.name}`
+  row.action = event.payload.ref_type
+  return row
 }
 
-const parseIssueCommentEvent = (event: any): [url: string, summary: string] => {
-  return [event.payload.comment.html_url, event.payload.action]
+const parseIssueCommentEvent = (event: any, row: Event): Event => {
+  row.type = event.payload.issue.pull_request === undefined ? 'IssueCommentEvent' : 'PullRequestCommentEvent'
+  row.url = event.payload.comment.html_url
+  row.action = event.payload.action
+  row.number = event.payload.issue.number
+  row.title = event.payload.issue.title
+  row.body = event.payload.comment.body
+  return row
 }
 
-const parseIssuesEvent = (event: any): [url: string, summary: string] => {
-  return [event.payload.issue.html_url, event.payload.action]
+const parseIssuesEvent = (event: any, row: Event): Event => {
+  row.url = event.payload.issue.html_url
+  row.action = event.payload.action
+  row.number = event.payload.issue.number
+  row.title = event.payload.issue.title
+  row.body = event.payload.issue.body
+  return row
 }
 
-const parsePullRequestEvent = (event: any): [url: string, summary: string] => {
-  return [event.payload.pull_request.html_url, event.payload.action]
+const parsePullRequestEvent = (event: any, row: Event): Event => {
+  let action: string = event.payload.action
+  if (action === 'closed' && event.payload.pull_request.merged === true) {
+    action = 'merged'
+  }
+  row.url = event.payload.pull_request.html_url
+  row.action = action
+  row.number = event.payload.pull_request.number
+  row.title = event.payload.pull_request.title
+  row.body = event.payload.pull_request.body
+  return row
 }
 
-const parsePullRequestReviewEvent = (event: any): [url: string, summary: string] => {
-  return [event.payload.review.html_url, event.payload.action]
+const parsePullRequestReviewEvent = (event: any, row: Event): Event => {
+  row.url = event.payload.review.html_url
+  row.action = event.payload.action
+  row.number = event.payload.pull_request.number
+  row.title = event.payload.pull_request.title
+  row.body = event.payload.review.body
+  return row
 }
 
-const parsePullRequestReviewCommentEvent = (event: any): [url: string, summary: string] => {
-  return [event.payload.comment.html_url, event.payload.action]
+const parsePullRequestReviewCommentEvent = (event: any, row: Event): Event => {
+  row.url = event.payload.comment.html_url
+  row.action = event.payload.action
+  row.number = event.payload.pull_request.number
+  row.title = event.payload.pull_request.title
+  row.body = event.payload.comment.body
+  return row
 }
 
-const parsePullRequestReviewThreadEvent = (event: any): [url: string, summary: string] => {
-  return [event.payload.thread.url, event.payload.action]
+const parsePullRequestReviewThreadEvent = (event: any, row: Event): Event => {
+  row.url = event.payload.thread.url
+  row.action = event.payload.action
+  row.number = event.payload.pull_request.number
+  row.title = event.payload.pull_request.title
+  return row
 }
 
-const parsePushEvent = (event: any): [url: string, summary: string] => {
-  return [`https://github.com/${event.repo.name}/commit/${event.payload.head}`, event.payload.distinct_size]
+// Action = distinct size
+const parsePushEvent = (event: any, row: Event): Event => {
+  row.url = `https://github.com/${event.repo.name}/commit/${event.payload.head}`
+  row.action = event.payload.distinct_size
+  row.title = event.payload.ref
+  return row
 }
