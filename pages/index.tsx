@@ -12,18 +12,24 @@ const Home: NextPage = () => {
   useEffect(() => {
     subscribeToEvents()
     return () => {
-      supabase.removeAllChannels()
+      supabase.removeAllSubscriptions()
     }
   }, [])
 
   const subscribeToEvents = () => {
     const channel = supabase
-      .channel('public:event')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'event' }, (payload: RealtimeEventPayload) => {
-        console.log('change received', payload)
-        // Update events
+      .from('event')
+      .on('INSERT', (payload) => {
+        console.log('changed received', payload)
         setEvents((events) => [payload.new, ...events])
       })
+      //.channel('public:event')
+      // .on('postgres_changes', { event: '*', schema: '*' }, (payload: any) => {
+      //   //.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'event' }, (payload: RealtimeEventPayload) => {
+      //   console.log('change received', payload)
+      //   // Update events
+      //   setEvents((events) => [payload.new, ...events])
+      // })
       .subscribe()
   }
 
