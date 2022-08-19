@@ -73,7 +73,7 @@ export const getSummaryFromEvent = (event: EventInfo) => {
   let summary: JSX.Element = <></>
   switch (event.type) {
     case 'CommitCommentEvent':
-      summary = <div>created a commit event</div>
+      summary = <div>created a commit comment</div>
       break
     case 'CreateEvent':
       summary = (
