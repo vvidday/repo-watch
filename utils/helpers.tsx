@@ -163,3 +163,33 @@ export const getSummaryFromEvent = (event: EventInfo) => {
     </div>
   )
 }
+
+export const getSumamryHeaderFromType = (type: string): string => {
+  const DEFAULT = '-'
+  if (!eventTypes.has(type)) return ''
+  switch (type) {
+    case 'CommitCommentEvent':
+      return 'Comment body:'
+    case 'CreateEvent':
+      return DEFAULT
+    case 'DeleteEvent':
+      return DEFAULT
+    case 'IssueCommentEvent':
+      return 'Comment body:'
+    case 'PullRequestCommentEvent':
+      return 'Comment body:'
+    case 'IssuesEvent':
+      return 'Issue body:'
+    case 'PullRequestEvent':
+      return 'Pull Request body:'
+    case 'PullRequestReviewEvent':
+      return 'Review body:'
+    case 'PullRequestReviewCommentEvent':
+      return 'Comment body:'
+    case 'PullRequestReviewThreadEvent':
+      return DEFAULT
+    case 'PushEvent':
+      return DEFAULT
+  }
+  return ''
+}
