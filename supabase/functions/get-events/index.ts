@@ -3,8 +3,7 @@
 // This enables autocomplete, go to definition, etc.
 
 import { serve } from 'https://deno.land/std@0.131.0/http/server.ts'
-import { Octokit } from 'https://cdn.skypack.dev/octokit?dts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@1.33.2'
+import { octokit, supabaseClient } from '../_shared/clients.ts'
 
 interface Event {
   id: number
@@ -41,19 +40,42 @@ const eventTypes = new Set<string>([
 ])
 
 serve(async (req) => {
-  const { name } = await req.json()
-  const githubKey = Deno.env.get('GITHUB_KEY')
-  const octokit = new Octokit({ auth: githubKey })
-  const supabaseClient = createClient(Deno.env.get('SUPABASE_URL') ?? '', Deno.env.get('SECRET_KEY') ?? '')
+  const { repos }: { repos: string[] } = await req.json()
 
+  const promises: Promise<Event[]>[] = []
+
+  for (const repo of repos) {
+    const [owner, repo_name] = repo.split('/')
+    if (owner === '' || repo_name === '') {
+      return new Response('Error: Ensure repos contains values of format <owner>/<repo_name>')
+    }
+    promises.push(getData(owner, repo_name))
+  }
+
+  const eventData = await Promise.all(promises)
+  let events: Event[] = []
+  for (const arr of eventData) {
+    events = [...events, ...arr]
+  }
+  const { data, error } = await supabaseClient.from('event').upsert(events)
+
+  // const { data, error } = await supabaseClient.from('event').upsert(rows)
+  if (error != null) {
+    return new Response(JSON.stringify(error), { headers: { 'Content-Type': 'application/json' } })
+  }
+  return new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json' } })
+})
+
+const getData = async (owner: string, repo: string, ignore_old: boolean = false): Promise<Event[]> => {
   const res = await octokit.request('GET /repos/{owner}/{repo}/events', {
-    owner: 'supabase',
-    repo: 'supabase',
+    owner: owner,
+    repo: repo,
   })
 
   let rows: Event[] = []
 
-  for (const event of res.data) {
+  for (let i = res.data.length - 1; i >= 0; i--) {
+    const event = res.data[i]
     if (event.type === null || !eventTypes.has(event.type)) {
       continue
     }
@@ -104,12 +126,8 @@ serve(async (req) => {
     }
     rows.push(row)
   }
-  const { data, error } = await supabaseClient.from('event').upsert(rows)
-  if (error != null) {
-    return new Response(JSON.stringify(error), { headers: { 'Content-Type': 'application/json' } })
-  }
-  return new Response(JSON.stringify(rows), { headers: { 'Content-Type': 'application/json' } })
-})
+  return rows
+}
 
 const parseCommitCommentEvent = (event: any, row: Event): Event => {
   row.url = event.payload.comment.html_url
