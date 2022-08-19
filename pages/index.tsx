@@ -1,13 +1,45 @@
-import type { NextPage } from 'next'
+import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import Events from '../components/Events'
 import { supabase } from '../utils/supabaseClient'
 import { EventInfo, RealtimeEventPayload } from '../utils/types'
+import { ParsedUrlQuery } from 'querystring'
 
-const Home: NextPage = () => {
+type Props = {
+  eventProps: EventInfo[]
+}
+
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  const { data, error } = await supabase.from('active_repos_view').select()
+  if (data === null) return { props: { eventProps: new Array<EventInfo>() } }
+  const promises: Promise<EventInfo[] | null>[] = []
+  for (const repo of data) {
+    promises.push(getLatestEvents(repo.id))
+  }
+  let events: EventInfo[] = []
+  const eventData = await Promise.all(promises)
+  for (const arr of eventData) {
+    if (arr !== null) {
+      events = [...events, ...arr]
+    }
+  }
+  return { props: { eventProps: events } }
+}
+
+const getLatestEvents = async (repo_id: number): Promise<EventInfo[] | null> => {
+  const { data, error } = await supabase.from('event').select('*').eq('repo_id', repo_id).limit(30)
+  if (error !== null) {
+    console.log(error)
+    return null
+  }
+  if (data === null) return null
+  return data
+}
+
+const Home: NextPage<Props> = ({ eventProps }: InferGetStaticPropsType<typeof getStaticProps>) => {
   // subscribe to inserts in event table
-  const [events, setEvents] = useState<EventInfo[]>([])
+  const [events, setEvents] = useState<EventInfo[]>([...eventProps])
 
   useEffect(() => {
     subscribeToEvents()
@@ -21,7 +53,7 @@ const Home: NextPage = () => {
       .from('event')
       .on('INSERT', (payload) => {
         console.log('changed received', payload)
-        setEvents((events) => [...events, payload.new])
+        setEvents((events) => [payload.new, ...events])
       })
       //.channel('public:event')
       // .on('postgres_changes', { event: '*', schema: '*' }, (payload: any) => {
