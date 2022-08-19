@@ -21,7 +21,7 @@ const Home: NextPage = () => {
       .from('event')
       .on('INSERT', (payload) => {
         console.log('changed received', payload)
-        setEvents((events) => [payload.new, ...events])
+        setEvents((events) => [...events, payload.new])
       })
       //.channel('public:event')
       // .on('postgres_changes', { event: '*', schema: '*' }, (payload: any) => {
