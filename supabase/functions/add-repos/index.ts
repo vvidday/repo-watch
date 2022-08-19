@@ -62,7 +62,7 @@ const getReposFromOrg = async (org: string): Promise<repoInfo[]> => {
     repos.push({
       id: repo.id,
       url: repo.html_url,
-      name: repo.name,
+      name: repo.full_name,
     })
   }
   return repos

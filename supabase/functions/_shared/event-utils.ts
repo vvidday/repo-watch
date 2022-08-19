@@ -56,7 +56,6 @@ export const getData = async (owner: string, repo: string, ignore_old: boolean =
 
 // Called once / once in a while to populate database - gets 30 whitelisted events (non-watch/fork). Needed for stale repos
 export const getDataStale = async (owner: string, repo: string): Promise<Event[]> => {
-  console.log('here')
   let rows: Event[] = []
   let page = 1
   while (rows.length < 30) {
