@@ -149,7 +149,7 @@ export const getSummaryFromEvent = (event: EventInfo) => {
   }
   return (
     <div className="flex items-center ml-3">
-      <a className="flex items-center mr-2" href={`https://github.com/${event.actor_username}`}>
+      <a className="flex items-center mr-2" href={`https://github.com/${event.actor_username}`} target="_blank">
         <Image
           className="rounded-full"
           src={`https://avatars.githubusercontent.com/u/${event.actor_id}`}
