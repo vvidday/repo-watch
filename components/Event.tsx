@@ -15,30 +15,36 @@ const Event: FC<{
   const summaryHeader = getSumamryHeaderFromType(ev.type)
 
   return (
-    <details className="lg:w-4/5 m-auto">
-      <summary className="flex items-center mx-5 my-3 cursor-pointer justify-between">
+    <details className="overflow-hidden 2xl:w-5/6 m-auto bg-zinc-800 rounded-lg my-2">
+      <summary className="mx-5 py-3 cursor-pointer grid grid-cols-[10fr_1fr] lg:grid-cols-[1fr_4fr_1fr] xl:grid-cols-[1fr_5fr_1fr]">
+        <div className="hidden lg:flex justify-end items-center mr-3">
+          <code>{getRepoNameFromId(ev.repo_id)}</code>
+        </div>
         <div className="flex items-center">
           {icon}
           {summary}
         </div>
-        <div className="flex">
-          <div className="hidden lg:block cursor-text">
+        <div className="flex justify-end items-center">
+          <div className="hidden lg:block cursor-text ml-2 xl:ml-5">
             <Moment fromNow interval={60000}>
               {ev.created_at}
             </Moment>
           </div>
           <a href={ev.url} className="ml-3" target="_blank">
-            <MarkGithubIcon size={24} />
+            <MarkGithubIcon className="hover:scale-110" size={24} />
           </a>
         </div>
       </summary>
-      <div className="bg-slate-800">
-        <p className="ml-5 font-bold">{ev.body === null || ev.body === '' ? '-' : summaryHeader}</p>
-        <ReactMarkdown
-          remarkPlugins={[[remarkGfm]]}
-          className="mt-2 ml-5 overflow-auto prose dark:prose-invert max-w-none"
-          children={ev.body || ''}
-        />
+      <div className="bg-neutral-800 grid grid-cols-[10fr_1fr] lg:grid-cols-[1fr_4fr_1fr] xl:grid-cols-[1fr_5fr_1fr]">
+        <div className="hidden lg:block"></div>
+        <div className="">
+          <p className="ml-5 font-semibold">{ev.body === null || ev.body === '' ? '-' : summaryHeader}</p>
+          <ReactMarkdown
+            remarkPlugins={[[remarkGfm]]}
+            className="mt-2 ml-5 overflow-auto prose dark:prose-invert max-w-none"
+            children={ev.body || ''}
+          />
+        </div>
       </div>
     </details>
   )
