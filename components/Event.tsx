@@ -8,7 +8,8 @@ import Moment from 'react-moment'
 
 const Event: FC<{
   ev: EventInfo
-}> = ({ ev }) => {
+  getRepoNameFromId: (id: number) => string
+}> = ({ ev, getRepoNameFromId }) => {
   const icon = getIconFromType(ev.type, ev.action ?? '')
   const summary = getSummaryFromEvent(ev)
   const summaryHeader = getSumamryHeaderFromType(ev.type)
