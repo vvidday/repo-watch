@@ -49,6 +49,12 @@ export const getData = async (owner: string, repo: string, ignore_old: boolean =
     if (event.type === null || !eventTypes.has(event.type)) {
       continue
     }
+    if (ignore_old === true) {
+      //  Stop on events older than 2 minutes
+      if (Date.now() - new Date(event.created_at).valueOf() > 120000) {
+        break
+      }
+    }
     rows.push(processDataEntry(event))
   }
   return rows
