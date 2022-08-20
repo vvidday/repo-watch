@@ -157,7 +157,7 @@ export const getSummaryFromEvent = (event: EventInfo) => {
           height="50px"
           layout="fixed"
         />
-        <strong className="hidden md:block ml-2">{event.actor_username}</strong>
+        <p className="hidden md:block ml-2 font-medium">{event.actor_username}</p>
       </a>
       {summary}
     </div>
