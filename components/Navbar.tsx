@@ -6,7 +6,7 @@ const Navbar: FC = () => {
     <nav className="bg-zinc-900 flex justify-center mb-10">
       <div className="w-full 2xl:w-5/6 flex justify-between items-center">
         <div className="flex items-center">
-          <Image src="/logo.png" width="50px" height="50px" />
+          <Image src="/logo.png" alt="logo" width="50px" height="50px" />
           <p className="hidden md:block ml-2 pt-1 text-2xl font-bold">Repo Watch</p>
         </div>
 

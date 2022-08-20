@@ -30,7 +30,7 @@ const Event: FC<{
               {ev.created_at}
             </Moment>
           </div>
-          <a href={ev.url} className="ml-3" target="_blank">
+          <a href={ev.url} className="ml-3" target="_blank" rel="noreferrer">
             <MarkGithubIcon className="hover:scale-110" size={24} />
           </a>
         </div>
@@ -39,11 +39,9 @@ const Event: FC<{
         <div className="hidden lg:block"></div>
         <div className="">
           <p className="ml-5 font-semibold">{ev.body === null || ev.body === '' ? '-' : summaryHeader}</p>
-          <ReactMarkdown
-            remarkPlugins={[[remarkGfm]]}
-            className="mt-2 ml-5 overflow-auto prose dark:prose-invert max-w-none"
-            children={ev.body || ''}
-          />
+          <ReactMarkdown remarkPlugins={[[remarkGfm]]} className="mt-2 ml-5 overflow-auto prose dark:prose-invert max-w-none">
+            {ev.body || ''}
+          </ReactMarkdown>
         </div>
       </div>
     </details>
