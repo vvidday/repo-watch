@@ -1,6 +1,7 @@
 <p align="center"><img alt="logo" src="./public/logo.png"></img></p>
 <h1 align="center">Repo Watch</h1>
 <p align="center">Watch for changes to Supabase repositories in real time</p>
+<p align="center"><a href="https://repo-watch.vercel.app/">Demo</a></p>
 <p align="center"><img src="./public/repowatch1.PNG"></img></p>
 <p align="center">Made as part of <a href="https://supabase.com/blog/launch-week-5-hackathon">Supabase Launch Week 5 Hackathon</a></p>
 <p align="center">Built With</p>
