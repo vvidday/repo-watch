@@ -91,51 +91,35 @@ export const getSummaryFromEvent = (event: EventInfo) => {
       )
       break
     case 'IssueCommentEvent':
-      summary = (
-        <div>
-          commented on issue #{event.number} ({event.title})
-        </div>
-      )
+      summary = <div>commented on issue #{event.number}</div>
       break
     case 'PullRequestCommentEvent':
-      summary = (
-        <div>
-          commented on pull request #{event.number} ({event.title})
-        </div>
-      )
+      summary = <div>commented on pull request #{event.number}</div>
       break
     case 'IssuesEvent':
       summary = (
         <div>
-          {event.action} issue #{event.number} ({event.title})
+          {event.action} issue #{event.number}
         </div>
       )
       break
     case 'PullRequestEvent':
       summary = (
         <div>
-          {event.action} pull request #{event.number} ({event.title})
+          {event.action} pull request #{event.number}
         </div>
       )
       break
     case 'PullRequestReviewEvent':
-      summary = (
-        <div>
-          created a review in pull request #{event.number} ({event.title})
-        </div>
-      )
+      summary = <div>created a review in pull request #{event.number}</div>
       break
     case 'PullRequestReviewCommentEvent':
-      summary = (
-        <div>
-          commented in a review in pull request #{event.number} ({event.title})
-        </div>
-      )
+      summary = <div>commented in a review in pull request #{event.number}</div>
       break
     case 'PullRequestReviewThreadEvent':
       summary = (
         <div>
-          {event.action} a review thread in pull request #{event.number} ({event.title})
+          {event.action} a review thread in pull request #{event.number}
         </div>
       )
       break
@@ -164,7 +148,27 @@ export const getSummaryFromEvent = (event: EventInfo) => {
   )
 }
 
-export const getSumamryHeaderFromType = (type: string): string => {
+export const getExpandedInfoFromEvent = (event: EventInfo) => {
+  switch (event.type) {
+    case 'IssueCommentEvent':
+      return `Issue #${event.number}: ${event.title}`
+    case 'PullRequestCommentEvent':
+      return `Pull Request #${event.number}: ${event.title}`
+    case 'IssuesEvent':
+      return `Issue #${event.number}: ${event.title}`
+    case 'PullRequestEvent':
+      return `Pull Request #${event.number}: ${event.title}`
+    case 'PullRequestReviewEvent':
+      return `Pull Request #${event.number}: ${event.title}`
+    case 'PullRequestReviewCommentEvent':
+      return `Pull Request #${event.number}: ${event.title}`
+    case 'PullRequestReviewThreadEvent':
+      return `Pull Request #${event.number}: ${event.title}`
+  }
+  return ''
+}
+
+export const getSummaryHeaderFromType = (type: string): string => {
   const DEFAULT = '-'
   if (!eventTypes.has(type)) return ''
   switch (type) {

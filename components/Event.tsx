@@ -1,6 +1,6 @@
 import { FC, Suspense, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { getIconFromType, getSumamryHeaderFromType, getSummaryFromEvent } from '../utils/helpers'
+import { getIconFromType, getSummaryHeaderFromType, getSummaryFromEvent, getExpandedInfoFromEvent } from '../utils/helpers'
 import { EventInfo } from '../utils/types'
 import remarkGfm from 'remark-gfm'
 import { MarkGithubIcon } from '@primer/octicons-react'
@@ -13,7 +13,8 @@ const Event: FC<{
 }> = ({ ev, getRepoNameFromId }) => {
   const icon = getIconFromType(ev.type, ev.action ?? '')
   const summary = getSummaryFromEvent(ev)
-  const summaryHeader = getSumamryHeaderFromType(ev.type)
+  const summaryHeader = getSummaryHeaderFromType(ev.type)
+  const expandedInfo = getExpandedInfoFromEvent(ev)
   const [eventTime, setEventTime] = useState('')
 
   // Workaround to only render time client side - avoid SSG hydration error
@@ -49,6 +50,7 @@ const Event: FC<{
       <div className="bg-neutral-800 grid grid-cols-[10fr_1fr] lg:grid-cols-[1fr_4fr_1fr] xl:grid-cols-[1fr_5fr_1fr]">
         <div className="hidden lg:block"></div>
         <div className="">
+          <p className="ml-5 text-lg mb-5">{expandedInfo}</p>
           <p className="ml-5 font-semibold">{ev.body === null || ev.body === '' ? '-' : summaryHeader}</p>
           <ReactMarkdown remarkPlugins={[[remarkGfm]]} className="mt-2 ml-5 overflow-auto prose dark:prose-invert max-w-none">
             {ev.body || ''}
