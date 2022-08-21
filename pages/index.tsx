@@ -10,6 +10,7 @@ import FilterReducer from '../utils/FilterReducer'
 import FilterComp from '../components/Filter'
 import { retrieveFilterFromStorage } from '../utils/localStorage'
 import Repositories from '../components/Repositories'
+import { HeartFillIcon } from '@primer/octicons-react'
 
 type Props = {
   eventsList: EventInfo[]
@@ -155,6 +156,14 @@ const Home: NextPage<Props> = ({ eventsList, repoMap }: InferGetStaticPropsType<
       </Head>
       <Navbar page={page} setPage={setPage} />
       <main className="mt-20">{main}</main>
+      <footer>
+        <p className="text-center">
+          Made with <HeartFillIcon fill="red" /> by{' '}
+          <a className="hover:text-green-600" href="https://github.com/vvidday" target="_blank" rel="noreferrer">
+            vvidday
+          </a>
+        </p>
+      </footer>
     </div>
   )
 }
