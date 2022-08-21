@@ -1,5 +1,6 @@
 import { Dispatch, FC, useState } from 'react'
 import { Filter, FilterAction, RepoMap } from '../utils/types'
+import FilterExcludeEvent from './FilterExcludeEvent'
 import FilterExcludeName from './FilterExcludeName'
 import FilterExcludeRepo from './FilterExcludeRepo'
 import FilterIncludeName from './FilterIncludeName'
@@ -16,6 +17,7 @@ const FilterComp: FC<{ filter: Filter; changeFilter: Dispatch<FilterAction>; rep
           <FilterExcludeName filter={filter} changeFilter={changeFilter} />
           <FilterIncludeName filter={filter} changeFilter={changeFilter} />
           <FilterExcludeRepo filter={filter} changeFilter={changeFilter} repoMap={repoMap} />
+          <FilterExcludeEvent filter={filter} changeFilter={changeFilter} />
         </div>
       ) : (
         <></>
