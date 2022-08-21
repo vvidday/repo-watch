@@ -63,7 +63,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   // const x = new Date(events[0].created_at)
   // // Sort eventsList by date
   // events.sort((a, b) => new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf())
-  return { props: { eventsList: response.data, repoMap } }
+  return { props: { eventsList: response.data, repoMap }, revalidate: 60 }
 }
 
 const getLatestEvents = async (repo_id: number): Promise<EventInfo[] | null> => {
