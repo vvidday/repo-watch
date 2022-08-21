@@ -133,9 +133,14 @@ export const getSummaryFromEvent = (event: EventInfo) => {
   }
   return (
     <div className="flex items-center ml-3">
-      <a className="flex items-center mr-2" href={`https://github.com/${event.actor_username}`} target="_blank" rel="noreferrer">
+      <a
+        className="flex items-center mr-2  hover:text-green-600"
+        href={`https://github.com/${event.actor_username}`}
+        target="_blank"
+        rel="noreferrer"
+      >
         <Image
-          className="rounded-full"
+          className="rounded-full hover:scale-105"
           src={`https://avatars.githubusercontent.com/u/${event.actor_id}`}
           width="50px"
           height="50px"

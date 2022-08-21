@@ -25,9 +25,14 @@ const Event: FC<{
   return (
     <details className="overflow-hidden 2xl:w-5/6 m-auto bg-zinc-800 rounded-lg my-2">
       <summary className="mx-5 py-3 cursor-pointer grid grid-cols-[10fr_1fr] lg:grid-cols-[1fr_2fr_1fr] xl:grid-cols-[1fr_3fr_1fr]">
-        <div className="hidden lg:flex justify-end items-center mr-3">
+        <a
+          href={`https://github.com/${getRepoNameFromId(ev.repo_id)}`}
+          target="_blank"
+          rel="noreferrer"
+          className="hidden lg:flex justify-end items-center mr-3 hover:text-green-600"
+        >
           <code>{getRepoNameFromId(ev.repo_id)}</code>
-        </div>
+        </a>
         <div className="flex items-center">
           {icon}
           {summary}
@@ -43,7 +48,7 @@ const Event: FC<{
             )}
           </div>
           <a href={ev.url} className="ml-3" target="_blank" rel="noreferrer">
-            <MarkGithubIcon className="hover:scale-110" size={24} />
+            <MarkGithubIcon className="hover:scale-110 hover:fill-green-600" size={24} />
           </a>
         </div>
       </summary>
