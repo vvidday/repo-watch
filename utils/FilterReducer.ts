@@ -32,11 +32,11 @@ function reducer(state: Filter, action: FilterAction): Filter {
       const new_exclude_repo = new Set(state.exclude_repo)
       if (action.action === FilterAct.ADD) {
         for (const repo of action.payload) {
-          if (typeof repo === 'number') new_exclude_repo.add(repo)
+          if (typeof repo === 'string') new_exclude_repo.add(repo)
         }
       } else {
         for (const repo of action.payload) {
-          if (typeof repo === 'number') new_exclude_repo.delete(repo)
+          if (typeof repo === 'string') new_exclude_repo.delete(repo)
         }
       }
       return { ...state, exclude_repo: new_exclude_repo }
