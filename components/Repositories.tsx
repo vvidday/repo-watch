@@ -1,15 +1,22 @@
-import { FC, FormEvent, useMemo, useState } from 'react'
-import { FuseResult, RepoMap } from '../utils/types'
+import { FC, FormEvent, useMemo, useState, Dispatch, SetStateAction } from 'react'
+import { EventInfo, FuseResult, RepoMap } from '../utils/types'
 import Fuse from 'fuse.js'
+import Repository from './Repository'
 
-const Repositories: FC<{ repoMap: RepoMap }> = ({ repoMap }) => {
-  const [currentRepo, setCurrentRepo] = useState('')
+const Repositories: FC<{
+  repoMap: RepoMap
+  events: EventInfo[]
+  setEvents: Dispatch<SetStateAction<EventInfo[]>>
+  currentRepoId: string
+  setCurrentRepoId: Dispatch<SetStateAction<string>>
+}> = ({ repoMap, events, setEvents, currentRepoId, setCurrentRepoId }) => {
+  const [searchTerm, setSearchTerm] = useState('')
   const [searchResults, setSearchResults] = useState<FuseResult[]>([])
   const [showSearchResults, setShowSearchResults] = useState(false)
 
   function onChange(event: FormEvent<HTMLInputElement>) {
     setSearchResults(fuse.search({ key: event.currentTarget.value }))
-    setCurrentRepo(event.currentTarget.value)
+    setSearchTerm(event.currentTarget.value)
   }
 
   const fuse = useMemo(() => {
@@ -25,41 +32,47 @@ const Repositories: FC<{ repoMap: RepoMap }> = ({ repoMap }) => {
 
   return (
     <div>
-      <input
-        className="rounded-lg px-2 py-1 w-[250px]"
-        type="text"
-        value={currentRepo}
-        onChange={onChange}
-        onFocus={() => {
-          if (!showSearchResults) setShowSearchResults(true)
-        }}
-        onBlur={() => {
-          if (showSearchResults) setShowSearchResults(false)
-        }}
-      />
-      {showSearchResults ? (
-        <div>
-          <ul className="relative">
-            {searchResults.map((result, i) => {
-              return (
-                <li
-                  className="-translate-x-1/2 md:translate-x-0 absolute first:rounded-t-lg last:rounded-b-lg
+      <div className="flex flex-col items-center justify-center mb-8">
+        <p className="text-xl">Search for Repo</p>
+        <input
+          className="rounded-lg px-2 py-1 w-[250px]"
+          type="text"
+          value={searchTerm}
+          onChange={onChange}
+          onFocus={() => {
+            if (!showSearchResults) setShowSearchResults(true)
+          }}
+          onBlur={() => {
+            if (showSearchResults) setShowSearchResults(false)
+          }}
+        />
+        {showSearchResults ? (
+          <div>
+            <ul className="relative">
+              {searchResults.map((result, i) => {
+                return (
+                  <li
+                    className="-translate-x-1/2 absolute first:rounded-t-lg last:rounded-b-lg
                   overflow-hidden bg-slate-600 hover:bg-slate-700 h-[50px] w-[250px] flex items-center cursor-pointer"
-                  style={{ top: `${i * 50}px` }}
-                  key={i}
-                  onMouseDown={() => {
-                    setCurrentRepo('')
-                  }}
-                >
-                  <p className="px-2">{result.item.key}</p>
-                </li>
-              )
-            })}
-          </ul>
-        </div>
-      ) : (
-        <></>
-      )}
+                    style={{ top: `${i * 50}px` }}
+                    key={i}
+                    onMouseDown={() => {
+                      setCurrentRepoId(result.item.value)
+                      setSearchTerm('')
+                    }}
+                  >
+                    <p className="px-2">{result.item.key}</p>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
+
+      <Repository repo_id={currentRepoId} events={events} setEvents={setEvents} getRepoNameFromId={(id) => repoMap[id]} />
     </div>
   )
 }

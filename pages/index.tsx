@@ -87,6 +87,8 @@ const Home: NextPage<Props> = ({ eventsList, repoMap }: InferGetStaticPropsType<
     exclude_repo: new Set<string>(),
   })
   const [page, setPage] = useState(0)
+  // Use in repo page
+  const [currentRepoId, setCurrentRepoId] = useState(events[0].repo_id.toString())
 
   useEffect(() => {
     subscribeToEvents()
@@ -133,7 +135,15 @@ const Home: NextPage<Props> = ({ eventsList, repoMap }: InferGetStaticPropsType<
       </>
     )
   } else if (page === 1) {
-    main = <Repositories repoMap={repoMap} />
+    main = (
+      <Repositories
+        repoMap={repoMap}
+        events={events}
+        setEvents={setEvents}
+        currentRepoId={currentRepoId}
+        setCurrentRepoId={setCurrentRepoId}
+      />
+    )
   }
 
   return (
