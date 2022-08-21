@@ -121,7 +121,7 @@ const Home: NextPage<Props> = ({ eventsList, repoMap }: InferGetStaticPropsType<
         <link rel="icon" href="/logo.png" />
       </Head>
       <Navbar />
-      <main>
+      <main className="mt-20">
         <FilterComp filter={filter} changeFilter={changeFilter} repoMap={repoMap} />
         <Events events={events} getRepoNameFromId={getRepoNameFromId} filter={filter} />
       </main>

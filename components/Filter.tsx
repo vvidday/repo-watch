@@ -9,7 +9,7 @@ const FilterComp: FC<{ filter: Filter; changeFilter: Dispatch<FilterAction>; rep
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <div>
+    <div className="block">
       <div className="flex justify-center">
         <button onClick={() => setExpanded(!expanded)} className="text-xl hover:text-green-600">
           Filters
