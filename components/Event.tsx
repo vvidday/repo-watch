@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, Suspense, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { getIconFromType, getSumamryHeaderFromType, getSummaryFromEvent } from '../utils/helpers'
 import { EventInfo } from '../utils/types'
@@ -6,7 +6,6 @@ import remarkGfm from 'remark-gfm'
 import { MarkGithubIcon } from '@primer/octicons-react'
 import Moment from 'react-moment'
 import 'moment-timezone'
-import moment from 'moment-timezone'
 
 const Event: FC<{
   ev: EventInfo
@@ -15,6 +14,12 @@ const Event: FC<{
   const icon = getIconFromType(ev.type, ev.action ?? '')
   const summary = getSummaryFromEvent(ev)
   const summaryHeader = getSumamryHeaderFromType(ev.type)
+  const [eventTime, setEventTime] = useState('')
+
+  // Workaround to only render time client side - avoid SSG hydration error
+  useEffect(() => {
+    setEventTime(() => ev.created_at)
+  }, [ev.created_at])
 
   return (
     <details className="overflow-hidden 2xl:w-5/6 m-auto bg-zinc-800 rounded-lg my-2">
@@ -28,9 +33,13 @@ const Event: FC<{
         </div>
         <div className="flex justify-end items-center">
           <div className="hidden lg:block cursor-text ml-2 xl:ml-5">
-            <Moment fromNow interval={60000}>
-              {moment.tz(ev.created_at, 'Etc/UTC')}
-            </Moment>
+            {eventTime === '' ? (
+              <></>
+            ) : (
+              <Moment fromNow interval={60000}>
+                {eventTime}
+              </Moment>
+            )}
           </div>
           <a href={ev.url} className="ml-3" target="_blank" rel="noreferrer">
             <MarkGithubIcon className="hover:scale-110" size={24} />
