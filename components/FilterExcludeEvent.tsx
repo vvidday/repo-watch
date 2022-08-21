@@ -38,7 +38,12 @@ const FilterExcludeEvent: FC<{ filter: Filter; changeFilter: Dispatch<FilterActi
         {Object.keys(eventMap).map((key, i) => {
           return (
             <li key={i}>
-              <input className="mr-2 cursor-pointer" type="checkbox" onChange={(e) => onChange(e, eventMap[key]['id'])} />
+              <input
+                className="mr-2 cursor-pointer"
+                type="checkbox"
+                checked={filter.exclude_event_type.has(eventMap[key]['id'])}
+                onChange={(e) => onChange(e, eventMap[key]['id'])}
+              />
               {key}
             </li>
           )
