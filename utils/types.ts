@@ -179,6 +179,7 @@ export type FilterAction = {
   type: FilterType
   action: FilterAct
   payload: string[] | number[]
+  filter?: Filter
 }
 
 export enum FilterAct {
@@ -191,8 +192,16 @@ export enum FilterType {
   INCLUDE_ONLY_NAMES = 'INCLUDE_ONLY_NAMES',
   EXCLUDE_EVENT_TYPES = 'EXCLUDE_EVENT_TYPES',
   EXCLUDE_REPOS = 'EXCLUDE_REPOS',
+  SET = 'SET',
 }
 
 export type RepoMap = {
   [id: string]: string
+}
+
+export type FilterObj = {
+  exclude_name: string[]
+  include_only_name: string[]
+  exclude_event_type: string[]
+  exclude_repo: string[]
 }

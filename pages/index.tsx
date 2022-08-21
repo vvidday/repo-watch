@@ -8,6 +8,7 @@ import { ParsedUrlQuery } from 'querystring'
 import Navbar from '../components/Navbar'
 import FilterReducer from '../utils/FilterReducer'
 import FilterComp from '../components/Filter'
+import { retrieveFilterFromStorage } from '../utils/localStorage'
 
 type Props = {
   eventsList: EventInfo[]
@@ -79,7 +80,7 @@ const Home: NextPage<Props> = ({ eventsList, repoMap }: InferGetStaticPropsType<
   const [events, setEvents] = useState<EventInfo[]>([...eventsList])
   //const [eventsRepo, setEventsRepo] = useState<EventsByRepo>(eventsByRepo)
   const [filter, changeFilter] = useReducer(FilterReducer, {
-    exclude_name: new Set<string>(['vercel[bot]', 'dependabot[bot]', 'github-actions[bot]']),
+    exclude_name: new Set<string>(),
     include_only_name: new Set<string>(),
     exclude_event_type: new Set<string>(),
     exclude_repo: new Set<string>(),
@@ -87,6 +88,13 @@ const Home: NextPage<Props> = ({ eventsList, repoMap }: InferGetStaticPropsType<
 
   useEffect(() => {
     subscribeToEvents()
+    // Retrieve from local storage & set filter
+    changeFilter({
+      type: FilterType.SET,
+      action: FilterAct.ADD,
+      payload: [],
+      filter: retrieveFilterFromStorage(),
+    })
     return () => {
       supabase.removeAllSubscriptions()
     }
