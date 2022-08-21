@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { useEffect, useReducer, useState } from 'react'
 import Events from '../components/Events'
 import { supabase } from '../utils/supabaseClient'
-import { EventInfo, Filter, FilterAct, FilterAction, FilterType, RealtimeEventPayload } from '../utils/types'
+import { EventInfo, Filter, FilterAct, FilterAction, FilterType, RealtimeEventPayload, RepoMap } from '../utils/types'
 import { ParsedUrlQuery } from 'querystring'
 import Navbar from '../components/Navbar'
 import FilterReducer from '../utils/FilterReducer'
@@ -20,10 +20,6 @@ type Repo = {
   name: string
 }
 
-type RepoMap = {
-  [id: number]: string
-}
-
 type EventsByRepo = {
   [id: number]: EventInfo[]
 }
@@ -38,7 +34,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
   // Build map
   for (const row of data) {
-    repoMap[row.id] = row.name
+    repoMap[row.id.toString()] = row.name
   }
 
   // Get latest 300 events
@@ -86,7 +82,7 @@ const Home: NextPage<Props> = ({ eventsList, repoMap }: InferGetStaticPropsType<
     exclude_name: new Set<string>(),
     include_only_name: new Set<string>(),
     exclude_event_type: new Set<string>(),
-    exclude_repo: new Set<number>(),
+    exclude_repo: new Set<string>(),
   })
 
   useEffect(() => {
@@ -126,7 +122,7 @@ const Home: NextPage<Props> = ({ eventsList, repoMap }: InferGetStaticPropsType<
       </Head>
       <Navbar />
       <main>
-        <FilterComp filter={filter} changeFilter={changeFilter} />
+        <FilterComp filter={filter} changeFilter={changeFilter} repoMap={repoMap} />
         <Events events={events} getRepoNameFromId={getRepoNameFromId} filter={filter} />
       </main>
     </div>

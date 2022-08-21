@@ -8,7 +8,7 @@ const filterEvent = (event: EventInfo, filter: Filter): boolean => {
   }
   const excludedUsername = filter.exclude_name.has(event.actor_username)
   const excludedEventType = filter.exclude_event_type.has(event.type)
-  const excludedRepo = filter.exclude_repo.has(event.repo_id)
+  const excludedRepo = filter.exclude_repo.has(event.repo_id.toString())
   return !excludedUsername && !excludedEventType && !excludedRepo
 }
 
