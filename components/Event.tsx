@@ -1,4 +1,4 @@
-import { FC, Suspense, useEffect, useState } from 'react'
+import { FC, Dispatch, SetStateAction, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { getIconFromType, getSummaryHeaderFromType, getSummaryFromEvent, getExpandedInfoFromEvent } from '../utils/helpers'
 import { EventInfo } from '../utils/types'
@@ -10,7 +10,9 @@ import 'moment-timezone'
 const Event: FC<{
   ev: EventInfo
   getRepoNameFromId: (id: number) => string
-}> = ({ ev, getRepoNameFromId }) => {
+  pos: number
+  setEventAsOld: (pos: number) => void
+}> = ({ ev, getRepoNameFromId, pos, setEventAsOld }) => {
   const icon = getIconFromType(ev.type, ev.action ?? '')
   const summary = getSummaryFromEvent(ev)
   const summaryHeader = getSummaryHeaderFromType(ev.type)
@@ -23,13 +25,19 @@ const Event: FC<{
   }, [ev.created_at])
 
   return (
-    <details className="overflow-hidden 2xl:w-5/6 m-auto bg-zinc-800 rounded-lg my-2">
+    <details
+      className="overflow-hidden 2xl:w-5/6 m-auto bg-zinc-800 rounded-lg my-2"
+      style={ev.new ? { border: 'solid', borderColor: '#15803d' } : {}}
+      onClick={() => {
+        if (ev.new) setEventAsOld(pos)
+      }}
+    >
       <summary className="mx-5 py-3 cursor-pointer grid grid-cols-[10fr_1fr] lg:grid-cols-[1fr_2fr_1fr] xl:grid-cols-[1fr_3fr_1fr]">
         <a
           href={`https://github.com/${getRepoNameFromId(ev.repo_id)}`}
           target="_blank"
           rel="noreferrer"
-          className="hidden lg:flex justify-end items-center mr-3 hover:text-green-600"
+          className="hidden lg:flex justify-end items-center mr-3 hover:text-green-700"
         >
           <code>{getRepoNameFromId(ev.repo_id)}</code>
         </a>

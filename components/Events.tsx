@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { Dispatch, FC, SetStateAction, useMemo } from 'react'
 import { EventInfo, Filter } from '../utils/types'
 import Event from './Event'
 
@@ -23,18 +23,29 @@ const getFilteredEvents = (events: EventInfo[], filter: Filter, limit: number) =
   return result
 }
 
-const Events: FC<{ events: EventInfo[]; getRepoNameFromId: (id: number) => string; filter: Filter }> = ({
-  events,
-  getRepoNameFromId,
-  filter,
-}) => {
+const Events: FC<{
+  events: EventInfo[]
+  getRepoNameFromId: (id: number) => string
+  filter: Filter
+  setEvents: Dispatch<SetStateAction<EventInfo[]>>
+}> = ({ events, getRepoNameFromId, filter, setEvents }) => {
   const latestEvents = useMemo(() => getFilteredEvents(events, filter, 100), [events, filter])
+  const setEventAsOld = (pos: number) => {
+    setEvents((events) => {
+      const newEvents = [...events]
+      newEvents[pos].new = false
+      return newEvents
+      // const eventToChange = events[pos]
+      // eventToChange.new = false
+      // return [...events.splice(0, pos), eventToChange, ...events.splice(pos + 1)]
+    })
+  }
   return (
     <div>
       {latestEvents.map((ev, i) => {
         return (
           <div key={i}>
-            <Event ev={ev} getRepoNameFromId={getRepoNameFromId} />
+            <Event ev={ev} getRepoNameFromId={getRepoNameFromId} pos={i} setEventAsOld={setEventAsOld} />
           </div>
         )
       })}

@@ -105,7 +105,7 @@ const Home: NextPage<Props> = ({ eventsList, repoMap }: InferGetStaticPropsType<
       .from('event')
       .on('INSERT', (payload) => {
         console.log('changed received', payload)
-        setEvents((events) => [payload.new, ...events])
+        setEvents((events) => [{ ...payload.new, new: true }, ...events])
       })
       //.channel('public:event')
       // .on('postgres_changes', { event: '*', schema: '*' }, (payload: any) => {
@@ -131,7 +131,7 @@ const Home: NextPage<Props> = ({ eventsList, repoMap }: InferGetStaticPropsType<
       <Navbar />
       <main className="mt-20">
         <FilterComp filter={filter} changeFilter={changeFilter} repoMap={repoMap} />
-        <Events events={events} getRepoNameFromId={getRepoNameFromId} filter={filter} />
+        <Events events={events} getRepoNameFromId={getRepoNameFromId} filter={filter} setEvents={setEvents} />
       </main>
     </div>
   )

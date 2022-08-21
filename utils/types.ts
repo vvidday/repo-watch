@@ -84,6 +84,7 @@ export type EventInfo = {
   number: number | null
   title: string | null
   body: string | null
+  new?: boolean
 }
 
 export type Json = string | number | boolean | null | { [key: string]: Json } | Json[]
