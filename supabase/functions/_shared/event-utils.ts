@@ -44,7 +44,7 @@ export const getData = async (owner: string, repo: string, ignore_old: boolean =
 
   let rows: Event[] = []
 
-  for (let i = res.data.length - 1; i >= 0; i--) {
+  for (let i = 0; i < res.data.length; i++) {
     const event = res.data[i]
     if (event.type === null || !eventTypes.has(event.type)) {
       continue
@@ -55,7 +55,7 @@ export const getData = async (owner: string, repo: string, ignore_old: boolean =
         break
       }
     }
-    rows.push(processDataEntry(event))
+    rows.unshift(processDataEntry(event))
   }
   return rows
 }
