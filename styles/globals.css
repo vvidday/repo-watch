@@ -3,7 +3,7 @@
 @tailwind utilities;
 @font-face {
   font-family: supabaseCustom;
-  src: url('/CustomFont-Book.woff');
+  src: url(/CustomFont-Book.woff);
 }
 html,
 body {
