@@ -206,3 +206,11 @@ export type FilterObj = {
   exclude_event_type: string[]
   exclude_repo: string[]
 }
+
+export type FuseResult = {
+  item: {
+    key: string
+    value: string
+  }
+  refIndex: number
+}

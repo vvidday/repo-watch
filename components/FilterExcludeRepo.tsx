@@ -1,7 +1,7 @@
 import { XCircleFillIcon } from '@primer/octicons-react'
 import Fuse from 'fuse.js'
 import { Dispatch, FC, FormEvent, useMemo, useState } from 'react'
-import { Filter, FilterAct, FilterAction, FilterType, RepoMap } from '../utils/types'
+import { Filter, FilterAct, FilterAction, FilterType, FuseResult, RepoMap } from '../utils/types'
 
 const FilterExcludeRepo: FC<{ filter: Filter; changeFilter: Dispatch<FilterAction>; repoMap: RepoMap }> = ({
   filter,
@@ -11,14 +11,6 @@ const FilterExcludeRepo: FC<{ filter: Filter; changeFilter: Dispatch<FilterActio
   function onChange(event: FormEvent<HTMLInputElement>) {
     setSearchResults(fuse.search({ key: event.currentTarget.value }))
     setRepo(event.currentTarget.value)
-  }
-
-  type FuseResult = {
-    item: {
-      key: string
-      value: string
-    }
-    refIndex: number
   }
 
   const [repo, setRepo] = useState('')
