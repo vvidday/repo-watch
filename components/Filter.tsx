@@ -10,10 +10,14 @@ const FilterComp: FC<{ filter: Filter; changeFilter: Dispatch<FilterAction>; rep
 
   return (
     <div>
-      <button onClick={() => setExpanded(!expanded)}>Filters</button>
+      <div className="flex justify-center">
+        <button onClick={() => setExpanded(!expanded)} className="text-xl hover:text-green-600">
+          Filters
+        </button>
+      </div>
+
       {expanded ? (
-        <div className="flex">
-          Filter Settings
+        <div className="flex flex-col md:flex-row flex-wrap justify-around">
           <FilterExcludeName filter={filter} changeFilter={changeFilter} />
           <FilterIncludeName filter={filter} changeFilter={changeFilter} />
           <FilterExcludeRepo filter={filter} changeFilter={changeFilter} repoMap={repoMap} />

@@ -12,7 +12,7 @@ const FilterExcludeEvent: FC<{ filter: Filter; changeFilter: Dispatch<FilterActi
       id: 'CreateEvent',
       about: 'A branch/tag is created',
     },
-    Delete: { id: 'DeleteEvent', about: 'A branch/tag is deleted' },
+    DeleteEvent: { id: 'DeleteEvent', about: 'A branch/tag is deleted' },
     'Issue comment': { id: 'IssueCommentEvent', about: 'An issue comment is created/edited/deleted' },
     'PR comment': { id: 'PullRequestCommentEvent', about: 'A PR comment is created/edited/deleted' },
     'Issue event': { id: 'IssuesEvent', about: 'An issue is changed' },
@@ -32,13 +32,13 @@ const FilterExcludeEvent: FC<{ filter: Filter; changeFilter: Dispatch<FilterActi
   }
 
   return (
-    <div>
-      Excluded Events
+    <div className="flex flex-col items-center md:block my-5">
+      <p className="text-lg mb-2">Excluded Events</p>
       <ul>
         {Object.keys(eventMap).map((key, i) => {
           return (
             <li key={i}>
-              <input type="checkbox" onChange={(e) => onChange(e, eventMap[key]['id'])} />
+              <input className="mr-2 cursor-pointer" type="checkbox" onChange={(e) => onChange(e, eventMap[key]['id'])} />
               {key}
             </li>
           )

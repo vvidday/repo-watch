@@ -37,9 +37,10 @@ const FilterExcludeRepo: FC<{ filter: Filter; changeFilter: Dispatch<FilterActio
   }, [repoMap])
 
   return (
-    <div>
-      <p>Excluded Repos</p>
+    <div className="flex flex-col items-center md:block my-5">
+      <p className="text-lg mb-2">Excluded Repos</p>
       <input
+        className="rounded-lg px-2 py-1 w-[250px]"
         type="text"
         value={repo}
         onChange={onChange}
@@ -56,7 +57,8 @@ const FilterExcludeRepo: FC<{ filter: Filter; changeFilter: Dispatch<FilterActio
             {searchResults.map((result, i) => {
               return (
                 <li
-                  className="absolute overflow-hidden bg-slate-600 hover:bg-slate-700 h-[50px] w-[200px] flex items-center cursor-pointer"
+                  className="-translate-x-1/2 md:translate-x-0 absolute first:rounded-t-lg last:rounded-b-lg
+                  overflow-hidden bg-slate-600 hover:bg-slate-700 h-[50px] w-[250px] flex items-center cursor-pointer"
                   style={{ top: `${i * 50}px` }}
                   key={i}
                   onMouseDown={() => {
@@ -91,7 +93,7 @@ const FilterExcludeRepo: FC<{ filter: Filter; changeFilter: Dispatch<FilterActio
                   })
                 }}
               >
-                <XCircleFillIcon size={16} className="cursor-pointer hover:fill-red-700" />
+                <XCircleFillIcon size={16} className="mr-2 cursor-pointer hover:fill-red-700" />
               </div>
               {repoMap[name]}
             </li>
