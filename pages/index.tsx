@@ -1,11 +1,13 @@
 import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import Events from '../components/Events'
 import { supabase } from '../utils/supabaseClient'
-import { EventInfo, RealtimeEventPayload } from '../utils/types'
+import { EventInfo, Filter, FilterAct, FilterAction, FilterType, RealtimeEventPayload } from '../utils/types'
 import { ParsedUrlQuery } from 'querystring'
 import Navbar from '../components/Navbar'
+import FilterReducer from '../utils/FilterReducer'
+import FilterComp from '../components/Filter'
 
 type Props = {
   eventsList: EventInfo[]
@@ -80,6 +82,12 @@ const Home: NextPage<Props> = ({ eventsList, repoMap }: InferGetStaticPropsType<
   // subscribe to inserts in event table
   const [events, setEvents] = useState<EventInfo[]>([...eventsList])
   //const [eventsRepo, setEventsRepo] = useState<EventsByRepo>(eventsByRepo)
+  const [filter, changeFilter] = useReducer(FilterReducer, {
+    exclude_name: new Set<string>(),
+    include_only_name: new Set<string>(),
+    exclude_event_type: new Set<string>(),
+    exclude_repo: new Set<number>(),
+  })
 
   useEffect(() => {
     subscribeToEvents()
@@ -118,7 +126,8 @@ const Home: NextPage<Props> = ({ eventsList, repoMap }: InferGetStaticPropsType<
       </Head>
       <Navbar />
       <main>
-        <Events events={events} getRepoNameFromId={getRepoNameFromId} />
+        <FilterComp filter={filter} changeFilter={changeFilter} />
+        <Events events={events} getRepoNameFromId={getRepoNameFromId} filter={filter} />
       </main>
     </div>
   )

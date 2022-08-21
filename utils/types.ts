@@ -167,3 +167,28 @@ export type RealtimeEventPayload = {
   // the database table. eg: "users".
   table: string
 }
+
+export type Filter = {
+  exclude_name: Set<string>
+  include_only_name: Set<string>
+  exclude_event_type: Set<string>
+  exclude_repo: Set<number>
+}
+
+export type FilterAction = {
+  type: FilterType
+  action: FilterAct
+  payload: string[]
+}
+
+export enum FilterAct {
+  ADD,
+  REMOVE,
+}
+
+export enum FilterType {
+  EXCLUDE_NAMES = 'EXCLUDE_NAMES',
+  INCLUDE_ONLY_NAMES = 'INCLUDE_ONLY_NAMES',
+  EXCLUDE_EVENT_TYPES = 'EXCLUDE_EVENT_TYPES',
+  EXCLUDE_REPOS = 'EXCLUDE_REPOS',
+}
