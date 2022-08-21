@@ -78,7 +78,12 @@ const Repository: FC<{
   return (
     <div>
       <div className="flex justify-center text-2xl">
-        <a href={`https://github.com/${getRepoNameFromId(parseInt(repo_id))}`} target="_blank" className=" hover:text-green-700">
+        <a
+          href={`https://github.com/${getRepoNameFromId(parseInt(repo_id))}`}
+          target="_blank"
+          rel="noreferrer"
+          className=" hover:text-green-700"
+        >
           {getRepoNameFromId(parseInt(repo_id))}
         </a>
       </div>
@@ -91,7 +96,11 @@ const Repository: FC<{
         <>
           {' '}
           {eventData.map((event, i) => {
-            return <Event ev={event} setEventAsOld={setEventAsOld} getRepoNameFromId={getRepoNameFromId} />
+            return (
+              <div key={i}>
+                <Event ev={event} setEventAsOld={setEventAsOld} getRepoNameFromId={getRepoNameFromId} />
+              </div>
+            )
           })}
         </>
       )}
