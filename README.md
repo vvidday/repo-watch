@@ -1,34 +1,41 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<p align="center"><img alt="logo" src="./public/logo.png"></img></p>
+<h1 align="center">Repo Watch</h1>
+<p align="center">Watch for changes to Supabase repositories in real time</p>
+<p align="center"><img src="./public/repowatch1.PNG"></img></p>
+<p align="center">Made as part of <a href="https://supabase.com/blog/launch-week-5-hackathon">Supabase Launch Week 5 Hackathon</a></p>
+<p align="center">Built With</p>
+<div align="center">
+<img style="margin-right:15px" width="100px" alt="supabaselogo" src="./public/supabase-logo-icon.svg"></img>
+<img style="margin-left:15px" height="100px" alt="supabaselogo" src="./public/Nextjs-logo.svg"></img>
+</div>
 
-## Getting Started
+---
 
-First, run the development server:
+# Features
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+- Real time\* updates for github events (PRs, issues, comments, pushes)
+- Filter according to username, repository, event type
+- Direct links to corresponding github pages
+- Universal view (all repos) & per-repo view
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+\*within the minute
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+# How it Works
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+This project makes heavy use of [Supabase](https://supabase.com/) features:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- Cron job [hosted on supabase](https://supabase.com/blog/postgres-as-a-cron-server) triggers an edge function every minute
+- [Edge function](https://supabase.com/docs/guides/functions) polls the GitHub API for events, processes them and stores them in database (hosted by Supabase, of course!)
+- Changes to the database are broadcasted to the frontend via [Supabase Realtime](https://supabase.com/docs/guides/realtime)
 
-## Learn More
+# Future Plans
 
-To learn more about Next.js, take a look at the following resources:
+- Webhook based fork & setup tools to support more repositories (see [#3](https://github.com/vvidday/repo-watch/issues/3))
+- More information for repositories (e.g. number of stars today)
+- Better body/summary information
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Acknowledgements
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Icons from [Octicons](https://primer.style/octicons/)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Font from [Supabase](https://github.com/supabase/supabase/tree/master/web/static/fonts/custom)
