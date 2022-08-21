@@ -30,10 +30,14 @@ const Events: FC<{
   setEvents: Dispatch<SetStateAction<EventInfo[]>>
 }> = ({ events, getRepoNameFromId, filter, setEvents }) => {
   const latestEvents = useMemo(() => getFilteredEvents(events, filter, 100), [events, filter])
-  const setEventAsOld = (pos: number) => {
+  const setEventAsOld = (event_id: number) => {
     setEvents((events) => {
       const newEvents = [...events]
-      newEvents[pos].new = false
+      for (const event of newEvents) {
+        if (event.id === event_id) {
+          event.new = false
+        }
+      }
       return newEvents
       // const eventToChange = events[pos]
       // eventToChange.new = false
@@ -45,7 +49,7 @@ const Events: FC<{
       {latestEvents.map((ev, i) => {
         return (
           <div key={i}>
-            <Event ev={ev} getRepoNameFromId={getRepoNameFromId} pos={i} setEventAsOld={setEventAsOld} />
+            <Event ev={ev} getRepoNameFromId={getRepoNameFromId} setEventAsOld={setEventAsOld} />
           </div>
         )
       })}

@@ -10,9 +10,8 @@ import 'moment-timezone'
 const Event: FC<{
   ev: EventInfo
   getRepoNameFromId: (id: number) => string
-  pos: number
-  setEventAsOld: (pos: number) => void
-}> = ({ ev, getRepoNameFromId, pos, setEventAsOld }) => {
+  setEventAsOld: (event_id: number) => void
+}> = ({ ev, getRepoNameFromId, setEventAsOld }) => {
   const icon = getIconFromType(ev.type, ev.action ?? '')
   const summary = getSummaryFromEvent(ev)
   const summaryHeader = getSummaryHeaderFromType(ev.type)
@@ -29,7 +28,7 @@ const Event: FC<{
       className="overflow-hidden 2xl:w-5/6 m-auto bg-zinc-800 rounded-lg my-2"
       style={ev.new ? { border: 'solid', borderColor: '#15803d' } : {}}
       onClick={() => {
-        if (ev.new) setEventAsOld(pos)
+        if (ev.new) setEventAsOld(ev.id)
       }}
     >
       <summary className="mx-5 py-3 cursor-pointer grid grid-cols-[10fr_1fr] lg:grid-cols-[1fr_2fr_1fr] xl:grid-cols-[1fr_3fr_1fr]">
