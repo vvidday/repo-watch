@@ -1,10 +1,12 @@
-import { FC, ReactNode, useEffect, useState } from 'react'
+import { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { getIconFromType, getSumamryHeaderFromType, getSummaryFromEvent } from '../utils/helpers'
 import { EventInfo } from '../utils/types'
 import remarkGfm from 'remark-gfm'
 import { MarkGithubIcon } from '@primer/octicons-react'
 import Moment from 'react-moment'
+import 'moment-timezone'
+import moment from 'moment-timezone'
 
 const Event: FC<{
   ev: EventInfo
@@ -27,7 +29,7 @@ const Event: FC<{
         <div className="flex justify-end items-center">
           <div className="hidden lg:block cursor-text ml-2 xl:ml-5">
             <Moment fromNow interval={60000}>
-              {ev.created_at}
+              {moment.tz(ev.created_at, 'Etc/UTC')}
             </Moment>
           </div>
           <a href={ev.url} className="ml-3" target="_blank" rel="noreferrer">
