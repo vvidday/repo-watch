@@ -19,7 +19,7 @@ const FilterExcludeName: FC<{ filter: Filter; changeFilter: Dispatch<FilterActio
   return (
     <div className="flex flex-col items-center md:block my-5">
       <p className="md:text-left text-lg mb-2">Excluded Names</p>
-      <form className="flex items-center-w[250px]" onSubmit={onSubmit}>
+      <form className="flex items-center-w[250px] mb-2" onSubmit={onSubmit}>
         <input className="w-[220px] rounded-lg px-2 py-1" type="text" value={name} onChange={(e) => setName(e.target.value)} />
         <button type="submit">
           <div className="flex">

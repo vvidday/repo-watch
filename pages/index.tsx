@@ -79,7 +79,7 @@ const Home: NextPage<Props> = ({ eventsList, repoMap }: InferGetStaticPropsType<
   const [events, setEvents] = useState<EventInfo[]>([...eventsList])
   //const [eventsRepo, setEventsRepo] = useState<EventsByRepo>(eventsByRepo)
   const [filter, changeFilter] = useReducer(FilterReducer, {
-    exclude_name: new Set<string>(),
+    exclude_name: new Set<string>(['vercel[bot]', 'dependabot[bot]', 'github-actions[bot]']),
     include_only_name: new Set<string>(),
     exclude_event_type: new Set<string>(),
     exclude_repo: new Set<string>(),

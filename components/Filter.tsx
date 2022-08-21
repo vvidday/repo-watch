@@ -9,7 +9,7 @@ const FilterComp: FC<{ filter: Filter; changeFilter: Dispatch<FilterAction>; rep
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <div className="block">
+    <div className="block 2xl:w-5/6 2xl:flex-col 2xl:m-auto">
       <div className="flex justify-center">
         <button onClick={() => setExpanded(!expanded)} className="text-xl hover:text-green-600">
           Filters
@@ -17,7 +17,7 @@ const FilterComp: FC<{ filter: Filter; changeFilter: Dispatch<FilterAction>; rep
       </div>
 
       {expanded ? (
-        <div className="flex flex-col md:flex-row flex-wrap justify-around">
+        <div className="flex flex-col md:flex-row flex-wrap justify-around 2xl:justify-between">
           <FilterExcludeName filter={filter} changeFilter={changeFilter} />
           <FilterIncludeName filter={filter} changeFilter={changeFilter} />
           <FilterExcludeRepo filter={filter} changeFilter={changeFilter} repoMap={repoMap} />

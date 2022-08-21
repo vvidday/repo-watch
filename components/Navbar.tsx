@@ -9,8 +9,8 @@ const Navbar: FC = () => {
         <p className="hidden md:block ml-2 pt-1 text-2xl font-bold">Repo Watch</p>
       </div>
       <div className="">
-        <button className="mr-8 hover:text-green-600 text-xl">Home</button>
-        <button className="ml-8 hover:text-green-600 text-xl">Repositories</button>
+        <button className="mr-2 sm:mr-8 hover:text-green-600 text-xl">Home</button>
+        <button className="ml-2 sm:ml-8 hover:text-green-600 text-xl">Repositories</button>
       </div>
     </nav>
   )
