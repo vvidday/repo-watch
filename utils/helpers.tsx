@@ -138,6 +138,7 @@ export const getSummaryFromEvent = (event: EventInfo) => {
         href={`https://github.com/${event.actor_username}`}
         target="_blank"
         rel="noreferrer"
+        onClick={(e) => e.stopPropagation()}
       >
         <Image
           className="rounded-full hover:scale-105"

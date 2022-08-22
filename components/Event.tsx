@@ -1,6 +1,11 @@
 import { FC, Dispatch, SetStateAction, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { getIconFromType, getSummaryHeaderFromType, getSummaryFromEvent, getExpandedInfoFromEvent } from '../utils/helpers'
+import {
+  getIconFromType,
+  getSummaryHeaderFromType,
+  getSummaryFromEvent,
+  getExpandedInfoFromEvent,
+} from '../utils/helpers'
 import { EventInfo } from '../utils/types'
 import remarkGfm from 'remark-gfm'
 import { MarkGithubIcon } from '@primer/octicons-react'
@@ -23,19 +28,25 @@ const Event: FC<{
     setEventTime(() => ev.created_at)
   }, [ev.created_at])
 
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
-    <details
+    <div
       className="overflow-hidden 2xl:w-5/6 m-auto bg-zinc-800 rounded-lg my-2"
       style={ev.new ? { border: 'solid', borderColor: '#15803d' } : {}}
-      onClick={() => {
-        if (ev.new) setEventAsOld(ev.id)
-      }}
     >
-      <summary className="mx-5 py-3 cursor-pointer grid grid-cols-[10fr_1fr] lg:grid-cols-[1fr_2fr_1fr] xl:grid-cols-[1fr_3fr_1fr]">
+      <div
+        onClick={() => {
+          setIsOpen(!isOpen)
+          if (ev.new) setEventAsOld(ev.id)
+        }}
+        className="mx-5 py-3 cursor-pointer grid grid-cols-[10fr_1fr] lg:grid-cols-[1fr_2fr_1fr] xl:grid-cols-[1fr_3fr_1fr]"
+      >
         <a
           href={`https://github.com/${getRepoNameFromId(ev.repo_id)}`}
           target="_blank"
           rel="noreferrer"
+          onClick={(e) => e.stopPropagation()}
           className="hidden lg:flex justify-end items-center mr-3 hover:text-green-700"
         >
           <code>{getRepoNameFromId(ev.repo_id)}</code>
@@ -54,22 +65,29 @@ const Event: FC<{
               </Moment>
             )}
           </div>
-          <a href={ev.url} className="ml-3" target="_blank" rel="noreferrer">
+          <a href={ev.url} className="ml-3" target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
             <MarkGithubIcon className="hover:scale-110 hover:fill-green-600" size={24} />
           </a>
         </div>
-      </summary>
-      <div className="bg-zinc-800 grid grid-cols-[10fr_1fr] lg:grid-cols-[1fr_2fr_1fr] xl:grid-cols-[1fr_3fr_1fr]">
-        <div className="hidden lg:block"></div>
-        <div className="">
-          <p className="ml-5 text-lg mb-5">{expandedInfo}</p>
-          <p className="ml-5 font-semibold">{ev.body === null || ev.body === '' ? '-' : summaryHeader}</p>
-          <ReactMarkdown remarkPlugins={[[remarkGfm]]} className="mt-2 ml-5 overflow-auto prose dark:prose-invert max-w-none">
-            {ev.body || ''}
-          </ReactMarkdown>
-        </div>
       </div>
-    </details>
+      {isOpen ? (
+        <div className="bg-zinc-800 grid grid-cols-[10fr_1fr] lg:grid-cols-[1fr_2fr_1fr] xl:grid-cols-[1fr_3fr_1fr]">
+          <div className="hidden lg:block"></div>
+          <div className="">
+            <p className="ml-5 text-lg mb-5">{expandedInfo}</p>
+            <p className="ml-5 font-semibold">{ev.body === null || ev.body === '' ? '-' : summaryHeader}</p>
+            <ReactMarkdown
+              remarkPlugins={[[remarkGfm]]}
+              className="mt-2 ml-5 overflow-auto prose dark:prose-invert max-w-none"
+            >
+              {ev.body || ''}
+            </ReactMarkdown>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
+    </div>
   )
 }
 
