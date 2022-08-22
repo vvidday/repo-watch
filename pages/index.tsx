@@ -41,7 +41,11 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   }
 
   // Get latest 300 events
-  const response = await supabase.from<EventInfo>('event').select('*').order('created_at', { ascending: false }).limit(200)
+  const response = await supabase
+    .from<EventInfo>('event')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(200)
   if (response.error != null) {
     return { props: { eventsList: events, repoMap } }
   }
@@ -64,7 +68,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   // const x = new Date(events[0].created_at)
   // // Sort eventsList by date
   // events.sort((a, b) => new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf())
-  return { props: { eventsList: response.data, repoMap }, revalidate: 60 }
+  return { props: { eventsList: response.data, repoMap } }
 }
 
 const getLatestEvents = async (repo_id: number): Promise<EventInfo[] | null> => {
