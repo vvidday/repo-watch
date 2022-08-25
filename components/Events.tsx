@@ -48,7 +48,7 @@ const Events: FC<{
     <div>
       {latestEvents.map((ev, i) => {
         return (
-          <div key={i}>
+          <div key={ev.id}>
             <Event ev={ev} getRepoNameFromId={getRepoNameFromId} setEventAsOld={setEventAsOld} />
           </div>
         )

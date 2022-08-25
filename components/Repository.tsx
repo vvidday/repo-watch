@@ -97,7 +97,7 @@ const Repository: FC<{
           {' '}
           {eventData.map((event, i) => {
             return (
-              <div key={i}>
+              <div key={event.id}>
                 <Event ev={event} setEventAsOld={setEventAsOld} getRepoNameFromId={getRepoNameFromId} />
               </div>
             )
