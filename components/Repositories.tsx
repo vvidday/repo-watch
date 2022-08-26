@@ -35,7 +35,7 @@ const Repositories: FC<{
       <div className="flex flex-col items-center justify-center mb-8">
         <p className="text-xl">Search for Repo</p>
         <input
-          className="rounded-lg px-2 py-1 w-[250px]"
+          className="rounded-lg px-2 py-1 w-[250px] border-neutral-200 border dark:bg-stone-800 dark:border-neutral-500"
           type="text"
           value={searchTerm}
           onChange={onChange}
@@ -53,7 +53,8 @@ const Repositories: FC<{
                 return (
                   <li
                     className="-translate-x-1/2 absolute first:rounded-t-lg last:rounded-b-lg
-                  overflow-hidden bg-slate-600 hover:bg-slate-700 h-[50px] w-[250px] flex items-center cursor-pointer"
+                  overflow-hidden bg-neutral-100 dark:bg-stone-800 dark:border-neutral-500 hover:bg-neutral-200 
+                  dark:hover:bg-stone-900 h-[50px] w-[250px] flex items-center cursor-pointer"
                     style={{ top: `${i * 50}px` }}
                     key={i}
                     onMouseDown={() => {
@@ -72,7 +73,12 @@ const Repositories: FC<{
         )}
       </div>
 
-      <Repository repo_id={currentRepoId} events={events} setEvents={setEvents} getRepoNameFromId={(id) => repoMap[id]} />
+      <Repository
+        repo_id={currentRepoId}
+        events={events}
+        setEvents={setEvents}
+        getRepoNameFromId={(id) => repoMap[id]}
+      />
     </div>
   )
 }
