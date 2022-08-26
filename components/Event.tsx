@@ -32,7 +32,7 @@ const Event: FC<{
 
   return (
     <div
-      className="overflow-hidden 2xl:w-5/6 m-auto bg-zinc-800 rounded-lg my-2"
+      className="overflow-hidden 2xl:w-5/6 m-auto bg-zinc-100 dark:bg-zinc-800 rounded-lg my-2"
       style={ev.new ? { border: 'solid', borderColor: '#15803d' } : {}}
     >
       <div
@@ -71,7 +71,7 @@ const Event: FC<{
         </div>
       </div>
       {isOpen ? (
-        <div className="bg-zinc-800 grid grid-cols-[10fr_1fr] lg:grid-cols-[1fr_2fr_1fr] xl:grid-cols-[1fr_3fr_1fr]">
+        <div className="bg-zinc-100 dark:bg-zinc-800 grid grid-cols-[10fr_1fr] lg:grid-cols-[1fr_2fr_1fr] xl:grid-cols-[1fr_3fr_1fr]">
           <div className="hidden lg:block"></div>
           <div className="">
             <p className="ml-5 text-lg mb-5">{expandedInfo}</p>

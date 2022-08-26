@@ -20,10 +20,15 @@ const FilterExcludeName: FC<{ filter: Filter; changeFilter: Dispatch<FilterActio
     <div className="flex flex-col items-center md:block my-5">
       <p className="md:text-left text-lg mb-2">Excluded Names</p>
       <form className="flex items-center-w[250px] mb-2" onSubmit={onSubmit}>
-        <input className="w-[220px] rounded-lg px-2 py-1" type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        <input
+          className="w-[220px] rounded-lg px-2 py-1 border-neutral-200 border dark:bg-stone-800 dark:border-neutral-500"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
         <button type="submit">
-          <div className="flex">
-            <PlusCircleIcon size={24} fill="white" className="ml-2 hover:fill-green-600" />
+          <div className="flex dark:fill-white">
+            <PlusCircleIcon size={24} className="ml-2 hover:fill-green-600" />
           </div>
         </button>
       </form>

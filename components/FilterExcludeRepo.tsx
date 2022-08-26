@@ -32,7 +32,7 @@ const FilterExcludeRepo: FC<{ filter: Filter; changeFilter: Dispatch<FilterActio
     <div className="flex flex-col items-center md:block my-5">
       <p className="text-lg mb-2">Excluded Repos</p>
       <input
-        className="rounded-lg px-2 py-1 w-[250px]"
+        className="rounded-lg px-2 py-1 w-[250px] border-neutral-200 border dark:bg-stone-800 dark:border-neutral-500"
         type="text"
         value={repo}
         onChange={onChange}
@@ -50,7 +50,8 @@ const FilterExcludeRepo: FC<{ filter: Filter; changeFilter: Dispatch<FilterActio
               return (
                 <li
                   className="-translate-x-1/2 md:translate-x-0 absolute first:rounded-t-lg last:rounded-b-lg
-                  overflow-hidden bg-slate-600 hover:bg-slate-700 h-[50px] w-[250px] flex items-center cursor-pointer"
+                  overflow-hidden bg-neutral-100 dark:bg-stone-800 dark:border-neutral-500 hover:bg-neutral-200 
+                  dark:hover:bg-stone-900 h-[50px] w-[250px] flex items-center cursor-pointer"
                   style={{ top: `${i * 50}px` }}
                   key={i}
                   onMouseDown={() => {
